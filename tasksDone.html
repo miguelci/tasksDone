@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Daily Report</title>
+    <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+  </head>
+  <body>
+
+    <div class="col-xs-12">
+      <h2>What am I doing today?</h2>
+
+      <div class="form_group">
+        <label for="tasks_text">Tasks done:</label>
+        <textarea class="form-control" rows="3" id="tasks_text"></textarea>
+        <!-- <button class="btn btn-default" onclick="addText()">Add text</button> -->
+      </div>
+      <br>
+      <div class="form-group">
+        <div id="header"><p>Bons dias,</p></div>
+        <div id="total_tasks"></div>
+        <div id="footer"><p>Cumprimentos</p></div>
+      </div>
+    </div>
+  </body>
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js"></script>
+  <script type="text/javascript" src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+  <script type="text/javascript">
+
+  var arrayTotalTasks = [
+  ];
+
+  var textArea = document.getElementById('tasks_text');
+  var pendingEditId = false;
+
+  $('#tasks_text').on('keypress', function(ev){
+    if(ev.keyCode == 13) { //enter
+      ev.preventDefault();
+      addText();
+    }
+  });
+
+    function addText(){
+        let totalTasks = document.getElementById('total_tasks');
+        let currentVal = arrayTotalTasks.length;
+        if(textArea.value !== ""){
+          let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + currentVal + ')"></span>';
+          let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + currentVal + ')"></span>';
+          arrayTotalTasks.push('<p id="p' + currentVal + '">' + textArea.value + spanToEdit + spanToRemove + '</p>');
+        }
+
+        totalTasks.innerHTML = arrayTotalTasks.join("");
+        textArea.value = "";
+    }
+
+    function removeItem(id){
+      arrayTotalTasks.splice(id, 1);
+      addText();
+    }
+
+    function editItem(id){
+      pendingEditId = id;
+      textArea.value = arrayTotalTasks[id];
+    }
+  </script>
+
+</html>
