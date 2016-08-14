@@ -33,6 +33,7 @@
   var textArea        = document.getElementById('tasks_text');
   var pendingEditId   = -1;
 
+  // adds an event listener to the text area
   document.getElementById('tasks_text').addEventListener('keypress', function(ev){
     if(ev.keyCode == 13) { //enter
       ev.preventDefault();
@@ -48,21 +49,22 @@
         localStorage.setItem('today', today);
     } else {
       isOtherDay = new Date(today) > new Date(storedDay);
-      if(isOtherDay){
+      if(isOtherDay){ //if it's other day, lets clear all the tasks
         localStorage.removeItem('todayTasks');
       }
     }
-    //see if there is some local storage
+    //see if there is local storage for the tasks
     let todayTasks = localStorage.getItem('todayTasks');
-    if(todayTasks){
+    if(todayTasks){ // and show them if available
       arrayTotalTasks = todayTasks.split(',');
-      addText();
+      writeText();
     }
   })();
 
+  // add a task
   function addText(){
     if(textArea.value !== ""){
-      if(pendingEditId > -1 ){
+      if(pendingEditId > -1 ){ // is there text to edit?
         addEditedText();
       } else {
         arrayTotalTasks.push(textArea.value);
@@ -71,6 +73,7 @@
     writeText();
   }
 
+  // replace the edited text
   function addEditedText(){
     if(textArea.value !== ""){
       arrayTotalTasks[pendingEditId] = textArea.value;
@@ -78,18 +81,21 @@
     }
   }
 
+  // removes the item and refresh's the total tasks div
   function removeItem(id){
     arrayTotalTasks.splice(id, 1);
     addText();
   }
 
+  //edit the item that a user has clicked
   function editItem(id){
-    pendingEditId = id;
+    pendingEditId = id; // add the current id to the pendingEditId
     let p = document.getElementById('p'+ id);
     textArea.value = p.textContent;
     textArea.focus();
   }
 
+  // write the text inside the array to the text div of the total tasks
   function writeText(){
     let totalTasks = document.getElementById('total_tasks');
     let currentVal = arrayTotalTasks.length;
@@ -99,8 +105,8 @@
       let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + idx + ')"></span>';
       totalTasks.innerHTML += '<p id="p' + idx + '">' + text + spanToEdit + spanToRemove + '</p>';
     });
-    localStorage.setItem('todayTasks', arrayTotalTasks);
-    textArea.value = "";
+    localStorage.setItem('todayTasks', arrayTotalTasks); // refresh the local storage
+    textArea.value = ""; // clear the text area
   }
   </script>
 
