@@ -33,7 +33,7 @@
   ];
 
   var textArea = document.getElementById('tasks_text');
-  var pendingEditId = false;
+  var pendingEditId = -1;
 
   $('#tasks_text').on('keypress', function(ev){
     if(ev.keyCode == 13) { //enter
@@ -43,16 +43,29 @@
   });
 
     function addText(){
-        let totalTasks = document.getElementById('total_tasks');
-        let currentVal = arrayTotalTasks.length;
-        if(textArea.value !== ""){
+      let totalTasks = document.getElementById('total_tasks');
+      let currentVal = arrayTotalTasks.length;
+
+      if(textArea.value !== ""){
+        if(pendingEditId > -1 ){
+          addEditedText();
+        } else {
           let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + currentVal + ')"></span>';
           let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + currentVal + ')"></span>';
           arrayTotalTasks.push('<p id="p' + currentVal + '">' + textArea.value + spanToEdit + spanToRemove + '</p>');
         }
+      }
+      totalTasks.innerHTML = arrayTotalTasks.join("");
+      textArea.value = "";
+    }
 
-        totalTasks.innerHTML = arrayTotalTasks.join("");
-        textArea.value = "";
+    function addEditedText(){
+      if(textArea.value !== ""){
+        let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + pendingEditId + ')"></span>';
+        let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + pendingEditId + ')"></span>';
+        arrayTotalTasks[pendingEditId] = '<p id="p' + pendingEditId + '">' + textArea.value + spanToEdit + spanToRemove + '</p>';
+        pendingEditId = -1;
+      }
     }
 
     function removeItem(id){
@@ -62,7 +75,8 @@
 
     function editItem(id){
       pendingEditId = id;
-      textArea.value = arrayTotalTasks[id];
+      let p = document.getElementById('p'+ id);
+      textArea.value = p.textContent;
     }
   </script>
 
