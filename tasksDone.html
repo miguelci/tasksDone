@@ -29,56 +29,58 @@
 
   <script type="text/javascript">
 
-  var arrayTotalTasks = [
-  ];
+  var arrayTotalTasks = [];
+  var textArea        = document.getElementById('tasks_text');
+  var pendingEditId   = -1;
 
-  var textArea = document.getElementById('tasks_text');
-  var pendingEditId = -1;
-
-  $('#tasks_text').on('keypress', function(ev){
+  document.getElementById('tasks_text').addEventListener('keypress', function(ev){
     if(ev.keyCode == 13) { //enter
       ev.preventDefault();
       addText();
     }
   });
 
-    function addText(){
-      let totalTasks = document.getElementById('total_tasks');
-      let currentVal = arrayTotalTasks.length;
-
-      if(textArea.value !== ""){
-        if(pendingEditId > -1 ){
-          addEditedText();
-        } else {
-          arrayTotalTasks.push(textArea.value);
-        }
-      }
-      totalTasks.innerHTML = "";
-      arrayTotalTasks.forEach(function(text, idx){
-        let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + idx + ')"></span>';
-        let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + idx + ')"></span>';
-        totalTasks.innerHTML += '<p id="p' + idx + '">' + text + spanToEdit + spanToRemove + '</p>';
-      });
-      textArea.value = "";
-    }
-
-    function addEditedText(){
-      if(textArea.value !== ""){
-        arrayTotalTasks[pendingEditId] = textArea.value;
-        pendingEditId = -1;
+  function addText(){
+    if(textArea.value !== ""){
+      if(pendingEditId > -1 ){
+        addEditedText();
+      } else {
+        arrayTotalTasks.push(textArea.value);
       }
     }
+    writeText();
+  }
 
-    function removeItem(id){
-      arrayTotalTasks.splice(id, 1);
-      addText();
+  function addEditedText(){
+    if(textArea.value !== ""){
+      arrayTotalTasks[pendingEditId] = textArea.value;
+      pendingEditId = -1;
     }
+  }
 
-    function editItem(id){
-      pendingEditId = id;
-      let p = document.getElementById('p'+ id);
-      textArea.value = p.textContent;
-    }
+  function removeItem(id){
+    arrayTotalTasks.splice(id, 1);
+    addText();
+  }
+
+  function editItem(id){
+    pendingEditId = id;
+    let p = document.getElementById('p'+ id);
+    textArea.value = p.textContent;
+    textArea.focus();
+  }
+
+  function writeText(){
+    let totalTasks = document.getElementById('total_tasks');
+    let currentVal = arrayTotalTasks.length;
+    totalTasks.innerHTML = "";
+    arrayTotalTasks.forEach(function(text, idx){
+      let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + idx + ')"></span>';
+      let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + idx + ')"></span>';
+      totalTasks.innerHTML += '<p id="p' + idx + '">' + text + spanToEdit + spanToRemove + '</p>';
+    });
+    textArea.value = "";
+  }
   </script>
 
 </html>
