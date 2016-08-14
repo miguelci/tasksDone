@@ -41,6 +41,17 @@
   });
 
   (function(){
+    //set the day
+    let today = new Date().toJSON().slice(0,10);
+    let storedDay = localStorage.getItem('today');
+    if(!storedDay){
+        localStorage.setItem('today', today);
+    } else {
+      isOtherDay = new Date(today) > new Date(storedDay);
+      if(isOtherDay){
+        localStorage.removeItem('todayTasks');
+      }
+    }
     //see if there is some local storage
     let todayTasks = localStorage.getItem('todayTasks');
     if(todayTasks){
