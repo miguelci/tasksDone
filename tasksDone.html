@@ -50,20 +50,21 @@
         if(pendingEditId > -1 ){
           addEditedText();
         } else {
-          let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + currentVal + ')"></span>';
-          let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + currentVal + ')"></span>';
-          arrayTotalTasks.push('<p id="p' + currentVal + '">' + textArea.value + spanToEdit + spanToRemove + '</p>');
+          arrayTotalTasks.push(textArea.value);
         }
       }
-      totalTasks.innerHTML = arrayTotalTasks.join("");
+      totalTasks.innerHTML = "";
+      arrayTotalTasks.forEach(function(text, idx){
+        let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + idx + ')"></span>';
+        let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + idx + ')"></span>';
+        totalTasks.innerHTML += '<p id="p' + idx + '">' + text + spanToEdit + spanToRemove + '</p>';
+      });
       textArea.value = "";
     }
 
     function addEditedText(){
       if(textArea.value !== ""){
-        let spanToEdit   = ' <span class="glyphicon glyphicon-pencil" onclick="editItem(' + pendingEditId + ')"></span>';
-        let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + pendingEditId + ')"></span>';
-        arrayTotalTasks[pendingEditId] = '<p id="p' + pendingEditId + '">' + textArea.value + spanToEdit + spanToRemove + '</p>';
+        arrayTotalTasks[pendingEditId] = textArea.value;
         pendingEditId = -1;
       }
     }
