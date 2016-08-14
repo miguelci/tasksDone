@@ -40,6 +40,15 @@
     }
   });
 
+  (function(){
+    //see if there is some local storage
+    let todayTasks = localStorage.getItem('todayTasks');
+    if(todayTasks){
+      arrayTotalTasks = todayTasks.split(',');
+      addText();
+    }
+  })();
+
   function addText(){
     if(textArea.value !== ""){
       if(pendingEditId > -1 ){
@@ -79,6 +88,7 @@
       let spanToRemove = ' <span class="glyphicon glyphicon-remove" onclick="removeItem(' + idx + ')"></span>';
       totalTasks.innerHTML += '<p id="p' + idx + '">' + text + spanToEdit + spanToRemove + '</p>';
     });
+    localStorage.setItem('todayTasks', arrayTotalTasks);
     textArea.value = "";
   }
   </script>
