@@ -3,8 +3,8 @@
   <head>
     <meta charset="utf-8">
     <title>Daily Report</title>
+    <link rel="shortcut icon" type="image/png" href="favicon-tasks.ico"/>
     <link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-
   </head>
   <body>
 
@@ -14,6 +14,7 @@
       <div class="form_group">
         <label for="tasks_text">Tasks done:</label>
         <textarea class="form-control" rows="3" id="tasks_text"></textarea>
+        <p class="text-muted text-right">Ctrl + enter para adicionar</p>
         <!-- <button class="btn btn-default" onclick="addText()">Add text</button> -->
       </div>
       <br>
@@ -35,7 +36,7 @@
 
   // adds an event listener to the text area
   document.getElementById('tasks_text').addEventListener('keypress', function(ev){
-    if(ev.keyCode == 13) { //enter
+    if(ev.keyCode == 10) { //ctrl + enter
       ev.preventDefault();
       addText();
     }
@@ -51,6 +52,7 @@
       isOtherDay = new Date(today) > new Date(storedDay);
       if(isOtherDay){ //if it's other day, lets clear all the tasks
         localStorage.removeItem('todayTasks');
+        localStorage.setItem('today', today);
       }
     }
     //see if there is local storage for the tasks
